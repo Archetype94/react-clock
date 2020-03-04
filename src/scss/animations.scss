@@ -1,0 +1,94 @@
+.fade {
+  &-in,
+  &-out,
+  &-out-hide,
+  &-out-hide-center {
+    animation-duration: $default-animation-duration;
+  }
+
+  &-in {
+    animation-name: fade-in;
+  }
+
+  &-out {
+    animation-name: fade-out;
+
+    &,
+    &-hide,
+    &-hide-center {
+      animation-fill-mode: forwards;
+    }
+
+    &-hide {
+      position: absolute;
+
+      &,
+      &-center {
+        animation-name: fade-out-hide;
+        user-select: none;
+        overflow: visible;
+      }
+    }
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fade-out-hide {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+
+  to {
+    opacity: 1;
+    max-height: 100%;
+  }
+}
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    user-select: none;
+  }
+}
+@keyframes fade-out-hide {
+  from {
+    opacity: 1;
+    max-height: 100%;
+  }
+
+  to {
+    opacity: 0;
+    max-height: 0;
+  }
+}
+@keyframes fade-out-up {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-75%);
+  }
+}
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(75%);
+  }
+
+  to {
+    opacity: 1;
+  }
+}

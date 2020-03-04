@@ -1,0 +1,53 @@
+@mixin only($browser) {
+  @if $browser == ie {
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+      @content;
+    }
+  }
+  @if $browser == edge {
+    @supports (-ms-ime-align:auto) {
+      @content;
+    }
+  }
+  @if $browser == safari {
+    @media not all and (min-resolution:.001dpcm) {
+      @supports (-webkit-appearance:none) {
+        // Safari 10.1+ Only
+        @content;
+      }
+    }
+  }
+}
+@mixin respond($size) {
+  @if $size == tl {
+    @media (max-width: 1200px) {
+      @content;
+    }
+  } @else 
+  if $size == tp {
+    @media (max-width: 900px) {
+      @content;
+    }
+  } @else 
+  if $size == p {
+    @media (max-width: 700px) {
+      @content;
+    }
+  } @else 
+  if $size == mv {
+    // Mobile view
+    @media (max-width: 1024px) {
+      @content;
+    }
+  } @else 
+  if $size == dv {
+    // Desktop view
+    @media (min-width: 1024px) {
+      @content;
+    }
+  } @else {
+    @media (max-width: $size) {
+      @content;
+    }
+  }
+}

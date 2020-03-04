@@ -1,0 +1,168 @@
+// @import '~bootstrap';
+@import 'core';
+@import url(//fonts.googleapis.com/css?family=Armata);
+
+body {
+  background-color: $black;
+  color: $white;
+}
+
+#browser-warning {
+  background-color: #FF0000;
+  color: $white;
+  padding: 1rem;
+  font-family: sans-serif;
+  text-align: center;
+}
+
+#app {
+  display: grid;
+  align-content: center;
+  text-align: center;
+  height: 100%;
+  transition: background-color $default-animation-duration;
+
+  &.alarm {
+    background-color: rgb(64,64,64);
+
+    .time-display {
+      transform: scale(1.1);
+    }
+  }
+}
+
+.time {
+  &-display {
+    &,
+    &-input {
+      &.ui {
+        transition: transform $default-animation-duration;
+        transition-timing-function: ease-in-out;
+        font-family: 'Armata', sans-serif;
+        font-size: 10vw !important;
+        font-weight: 300 !important;
+        padding: 10vh 0 !important;
+      }
+    }
+
+    &-input {
+      &.ui input {
+        width: 1.5em;
+        font-family: 'Armata', sans-serif;
+        font-size: 10vw !important;
+        background-color: transparent !important;
+        color: $white !important;
+        padding: 0 !important;
+        text-align: center;
+        border: none;
+
+        &::selection {
+          color: $black;
+          background: $white;
+        }
+      }
+    }
+
+    &-digit {
+      position: relative;
+
+      * {
+        display: inline-block;
+        text-align: center;
+        width: 0.75em;
+      }
+
+      &-old {
+        opacity: 0;
+        position: absolute;
+        user-select: none;
+      }
+
+      &.tick {
+        * {
+          animation-duration: 0.49s;
+          animation-timing-function: ease-out;
+        }
+
+        .time-display-digit {
+          &-old {
+            animation-name: fade-out-up;
+          }
+
+          &-new {
+            animation-name: fade-in-up;
+          }
+        }
+      }
+    }
+  }
+}
+
+.ui-inactive {
+  cursor: none;
+
+  .time-display {
+    &.ui {
+      transform: scale(1.25);
+    }
+  }
+}
+
+.ui {
+  &.inverted {
+    label {
+      color: $white !important;
+    }
+  }
+
+  &.container {
+    padding: 1rem;
+  }
+
+  &.buttons {
+    .button {
+      &:not(:first-child) {
+        margin-left: -1.5px;
+      }
+      @include respond($mobile-view) {
+        width: 100%;
+        display: block !important;
+
+        &:not(:first-child) {
+          margin-top: -1.5px;
+          margin-left: 0;
+        }
+
+        &:first-child {
+          border-bottom-left-radius: 0;
+          border-top-right-radius: 0.28571429rem;
+        }
+
+        &:last-child {
+          border-top-right-radius: 0;
+          border-bottom-left-radius: 0.28571429rem;
+        }
+      }
+    }
+    @include respond($mobile-view) {
+      display: block !important;
+    }
+  }
+
+  .button {
+    &.inverted.icon {
+      .icon {
+        border-right: 0.5px solid;
+        border-color: inherit;
+        border-radius: inherit;
+      }
+
+      &:hover {
+        .icon {
+          border: none;
+          border-color: $black;
+        }
+      }
+    }
+  }
+}
