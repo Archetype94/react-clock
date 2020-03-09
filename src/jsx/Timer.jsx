@@ -1,8 +1,8 @@
 import React from 'react'
-import InputMask from 'react-input-mask'
 import { Button, Container } from 'semantic-ui-react'
-import TimeDisplay from './TimeDisplay.jsx'
 
+import TimeInput from './TimeInput.jsx'
+import TimeDisplay from './TimeDisplay.jsx'
 import { dom } from '../js/core.js'
 
 const TimerStates = {
@@ -29,20 +29,22 @@ export default class Timer extends React.Component {
   }
 
   componentDidMount() {
-    const inputMinutes = dom.select('.time-display-input input[name=setMinutes]')
+    const inputMinutes = dom.select('.time-display-input input[id=setMinutes]')
 
     inputMinutes.focus()
     inputMinutes.selectionStart = 0
     inputMinutes.selectionEnd = 0
-
-    // TODO: Get this to work visually with InputMask
-    inputMinutes.setAttribute('value', this.state.setMinutes.toString())
-    inputMinutes.value = this.state.setMinutes.toString()
   }
 
   componentWillUnmount() {
     dom.removeClass(app, 'alarm')
     clearInterval(this.interval)
+  }
+
+  setTime(segment, value) {
+    this.setState({
+      [segment]: value
+    })
   }
 
   start() {
@@ -125,94 +127,6 @@ export default class Timer extends React.Component {
     }
   }
 
-  beforeMaskedValueChange = (newState, oldState, userInput) => {
-    const { value } = newState
-    const selection = newState.selection
-
-    if (userInput) {
-      const
-        newSelection = selection ? selection.start : null,
-        oldSelection = oldState.selection ? oldState.selection.start : null
-
-      if (newSelection == 2 && oldSelection == 1) {
-        const
-          allInputs = dom.selectAll('.time-display-input input'),
-          nextInputIndex = (() => {
-            for (let i = 0; i < allInputs.length; i++) {
-              if (allInputs[i] == document.activeElement) {
-                return i + 1
-              }
-            }
-          })(),
-          nextInput = nextInputIndex < allInputs.length ? allInputs[nextInputIndex] : null
-
-        if (nextInput) {
-          nextInput.select()
-        }
-      }
-    }
-
-    return {
-      value,
-      selection
-    }
-  }
-
-  onChange = (event) => {
-    const
-      target = event.target,
-      value = target.type === 'checkbox' ? target.checked : target.value,
-      name = target.name
-
-    this.setState({
-      [name]: value
-    })
-  }
-
-  onKeyDown = (event) => {
-    if (event.key == 'ArrowLeft' || event.key == 'ArrowRight') {
-      const
-        allInputs = dom.selectAll('.time-display-input input'),
-        target = event.target,
-        targetSelectionIndex = target.selectionStart,
-        equalsTarget = (element) => element == target
-
-      var
-        nextInputIndex,
-        nextInput
-
-      if (event.key == 'ArrowLeft' && targetSelectionIndex == 0) {
-        nextInputIndex = Array.from(allInputs).findIndex(equalsTarget) - 1
-      } else if (event.key == 'ArrowRight' && targetSelectionIndex == target.value.length) {
-        nextInputIndex = Array.from(allInputs).findIndex(equalsTarget) + 1
-      }
-
-      nextInput = nextInputIndex < allInputs.length ? allInputs[nextInputIndex] : null
-
-      if (nextInput) {
-        nextInput.select()
-      }
-    } else if (event.key == 'Enter') {
-      this.start()
-    }
-  }
-
-  renderInput(name) {
-    return (
-      <div className="ui input">
-        <InputMask
-          mask="99"
-          maskChar="0"
-          alwaysShowMask={true}
-          name={name}
-          onKeyUp={this.onKeyDown}
-          onChange={this.onChange}
-          beforeMaskedValueChange={this.beforeMaskedValueChange}
-        />
-      </div>
-    )
-  }
-
   render() {
     if (!this.state.alarm)
       dom.removeClass(app, 'alarm')
@@ -223,7 +137,22 @@ export default class Timer extends React.Component {
             (this.state.componentState == TimerStates.Stop
             ? 'fade-in' : 'hide') + ' time-display-input'
           }>
-          {this.renderInput('setHours')}:{this.renderInput('setMinutes')}:{this.renderInput('setSeconds')}
+          {/* // TODO: Refactor into map? */}
+          <TimeInput
+            id='setHours'
+            value={this.state.setHours}
+            setTime={this.setTime.bind(this, 'setHours')}
+          />:
+          <TimeInput
+            id='setMinutes'
+            value={this.state.setMinutes}
+            setTime={this.setTime.bind(this, 'setMinutes')}
+          />:
+          <TimeInput
+            id='setSeconds'
+            value={this.state.setSeconds}
+            setTime={this.setTime.bind(this, 'setSeconds')}
+          />
         </Container>
         <Container className={
             this.state.componentState == TimerStates.Pause
