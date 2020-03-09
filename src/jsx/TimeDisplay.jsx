@@ -11,9 +11,9 @@ export default class TimeDisplay extends React.Component {
             <TimeDisplaySegment segment={this.props.hours}/>:
           </span>
           <span className={
-            this.props.minutes == 0 && this.props.hours == 0 ?
-            'fade-out-hide' : 'fade-in'
-          }>
+              this.props.minutes == 0 && this.props.hours == 0 ?
+              'fade-out-hide' : 'fade-in'
+            }>
             <TimeDisplaySegment segment={this.props.minutes}/>:
           </span>
           <TimeDisplaySegment segment={this.props.seconds}/>
@@ -21,7 +21,6 @@ export default class TimeDisplay extends React.Component {
           <span className='fade-in'>
             .<TimeDisplaySegment
               segment={this.props.milliseconds}
-              digits={3}
               noAnimation
             />
           </span>
@@ -72,8 +71,6 @@ class TimeDisplaySegment extends React.Component {
       output = '0' + output
     }
 
-    // if (this.state.digits == 4) console.log(time.length, zeros, output);
-
     return output
   }
 
@@ -101,7 +98,7 @@ class TimeDisplaySegment extends React.Component {
       })
 
       if (changed) {
-        clearTimeout(this.state.tickTimeout) // TODO: test this line
+        clearTimeout(this.state.tickTimeout)
         this.state.tickTimeout = setTimeout(function() {
           const updatedSegment = this.state.segment.slice()
 
@@ -122,8 +119,8 @@ class TimeDisplaySegment extends React.Component {
     return this.state.segment.map(digit => {
       return (
         <span className={
-            (digit.changed && !this.props.noAnimation ?
-            'tick ' : '') + 'time-display-digit'
+            (digit.changed && !this.props.noAnimation ? 'tick ' : '')
+            + 'time-display-digit'
           }>
           {this.props.noAnimation ? null :
             <span className='time-display-digit-old'>

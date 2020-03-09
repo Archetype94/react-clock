@@ -32,39 +32,39 @@ export default class Stopwatch extends React.Component {
       this.state.secondDate = new Date()
     }
     this.interval = setInterval(() => this.tick(), 10)
-    this.setState(state => ({
+    this.setState({
       componentState: StopwatchStates.Start
-    }))
+    })
   }
   pause() {
     clearInterval(this.interval)
-    this.setState(state => ({
+    this.setState({
       componentState: StopwatchStates.Pause
-    }))
+    })
   }
   stop() {
     clearInterval(this.interval)
     this.reset()
-    this.setState(state => ({
+    this.setState({
       componentState: StopwatchStates.Stop
-    }))
+    })
   }
 
   reset() {
-    this.setState(state => ({
+    this.setState({
       hours: 0,
       minutes: 0,
       seconds: 0,
       milliseconds: 0
-    }))
+    })
   }
 
   tick() {
     const tickTime = new Date() - this.state.secondDate
 
-    this.setState(state => ({
+    this.setState({
       milliseconds: tickTime % 1000
-    }))
+    })
 
     if (tickTime >= 1000) {
       this.state.secondDate = new Date() - tickTime % 1000
@@ -95,10 +95,10 @@ export default class Stopwatch extends React.Component {
           hours={this.state.hours}
           minutes={this.state.minutes}
           seconds={this.state.seconds}
-          milliseconds={this.state.milliseconds}
+          milliseconds={Math.floor(this.state.milliseconds / 10)}
         />
         <Container
-          className={this.props.appState.uiActive ? 'fade-in-hide' : 'fade-out-hide-center'}>
+          className={this.props.appState.uiActive || this.state.componentState != StopwatchStates.Start ? 'fade-in-hide' : 'fade-out-hide-center'}>
           <Button icon='play' labelPosition='left' color="green" content='Start' inverted
             className={
               this.state.componentState == StopwatchStates.Start

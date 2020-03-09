@@ -24,11 +24,11 @@ export default class Time extends React.Component {
   tick() {
     const time = new Date()
 
-    this.setState(state => ({
+    this.setState({
       hours: time.getHours(),
       minutes: time.getMinutes(),
       seconds: time.getSeconds()
-    }))
+    })
   }
 
   render() {

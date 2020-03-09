@@ -22,7 +22,7 @@ export default class Timer extends React.Component {
       seconds: 0,
       milliseconds: 0,
       setHours: 0,
-      setMinutes: 0,
+      setMinutes: 10,
       setSeconds: 0,
       alarm: false
     }
@@ -34,9 +34,14 @@ export default class Timer extends React.Component {
     inputMinutes.focus()
     inputMinutes.selectionStart = 0
     inputMinutes.selectionEnd = 0
+
+    // TODO: Get this to work visually with InputMask
+    inputMinutes.setAttribute('value', this.state.setMinutes.toString())
+    inputMinutes.value = this.state.setMinutes.toString()
   }
 
   componentWillUnmount() {
+    dom.removeClass(app, 'alarm')
     clearInterval(this.interval)
   }
 
@@ -47,25 +52,25 @@ export default class Timer extends React.Component {
       this.state.secondDate = new Date()
       this.reset()
     }
-    this.interval = setInterval(() => this.tick(), 10)
-    this.setState(() => ({
+    this.interval = setInterval(() => this.tick(), 100)
+    this.setState({
       componentState: TimerStates.Start,
       alarm: false
-    }))
+    })
   }
   pause() {
     clearInterval(this.interval)
-    this.setState(() => ({
+    this.setState({
       componentState: TimerStates.Pause
-    }))
+    })
   }
   stop() {
     clearInterval(this.interval)
     this.reset()
-    this.setState(() => ({
+    this.setState({
       componentState: TimerStates.Stop,
       alarm: false
-    }))
+    })
   }
 
   reset() {
@@ -85,53 +90,38 @@ export default class Timer extends React.Component {
     if (this.state.alarm) {
       dom.toggleClass(app, 'alarm')
     } else {
-      dom.removeClass(app, 'alarm')
       clearInterval(this.interval)
     }
   }
 
   tick() {
-    const
-      tickTime = new Date() - this.state.secondDate,
-      milliseconds = this.state.milliseconds,
-      seconds = this.state.seconds,
-      minutes = this.state.minutes,
-      hours = this.state.hours
+    const tickTime = new Date() - this.state.secondDate
 
-    this.setState(state => ({
+    this.setState({
       milliseconds: tickTime % 1000
-    }))
+    })
 
     if (tickTime >= 1000) {
       this.state.secondDate = new Date() - tickTime % 1000
+      this.state.seconds = this.state.seconds - 1
 
-      if (
-        seconds <= 0 &&
-        minutes <= 0 &&
-        hours <= 0
-      ) {
+      if (this.state.seconds <= 0 && this.state.minutes <= 0 && this.state.hours <= 0) {
         this.pause()
-        this.setState(() => ({ alarm: true }))
+        this.setState({
+          alarm: true
+        })
         this.interval = setInterval(() => this.updateAlarm(), 500)
-      } else {
-        this.setState(() => ({
-          seconds: seconds - 1
-        }))
+      } else if (this.state.seconds < 0) {
+        this.state.seconds = 59
+        this.state.minutes = this.state.minutes - 1
 
-        if (seconds <= 0) {
-          this.setState(() => ({
-            seconds: 59,
-            minutes: minutes - 1
-          }))
-
-          if (minutes <= 0) {
-            this.setState(() => ({
-              minutes: 59,
-              hours: hours - 1
-            }))
-          }
+        if (this.state.minutes < 0) {
+          this.state.minutes = 59
+          this.state.hours = this.state.hours - 1
         }
       }
+
+      this.render()
     }
   }
 
@@ -180,7 +170,7 @@ export default class Timer extends React.Component {
   }
 
   onKeyDown = (event) => {
-    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+    if (event.key == 'ArrowLeft' || event.key == 'ArrowRight') {
       const
         allInputs = dom.selectAll('.time-display-input input'),
         target = event.target,
@@ -191,27 +181,30 @@ export default class Timer extends React.Component {
         nextInputIndex,
         nextInput
 
-      if (event.key === 'ArrowLeft' && targetSelectionIndex == 0) {
+      if (event.key == 'ArrowLeft' && targetSelectionIndex == 0) {
         nextInputIndex = Array.from(allInputs).findIndex(equalsTarget) - 1
-      } else if (event.key === 'ArrowRight' && targetSelectionIndex == target.value.length) {
+      } else if (event.key == 'ArrowRight' && targetSelectionIndex == target.value.length) {
         nextInputIndex = Array.from(allInputs).findIndex(equalsTarget) + 1
       }
 
       nextInput = nextInputIndex < allInputs.length ? allInputs[nextInputIndex] : null
+
       if (nextInput) {
         nextInput.select()
       }
+    } else if (event.key == 'Enter') {
+      this.start()
     }
   }
 
-  renderInput(segment) {
+  renderInput(name) {
     return (
       <div className="ui input">
         <InputMask
           mask="99"
           maskChar="0"
           alwaysShowMask={true}
-          name={segment}
+          name={name}
           onKeyUp={this.onKeyDown}
           onChange={this.onChange}
           beforeMaskedValueChange={this.beforeMaskedValueChange}
@@ -221,6 +214,9 @@ export default class Timer extends React.Component {
   }
 
   render() {
+    if (!this.state.alarm)
+      dom.removeClass(app, 'alarm')
+
     return (
       <Container fluid>
         <Container fluid className={

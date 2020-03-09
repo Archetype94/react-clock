@@ -4,26 +4,20 @@ if (browser.isTerrible() && !browser.supportsObjectFunctions()) {
   body.innerHTML = '<div id="browser-warning">Your web browser is not good! Please consider updating it or using a better one, otherwise this page (and many others) may not load correctly!</div>' + body.innerHTML
 }
 
-//import 'fomantic-ui'
+// import 'fomantic-ui'
 import 'fomantic-ui/dist/components/reset.css'
 import 'fomantic-ui/dist/components/site.css'
 import 'fomantic-ui/dist/components/container.css'
 import 'fomantic-ui/dist/components/button.css'
 import 'fomantic-ui/dist/components/icon.css'
-import 'fomantic-ui/dist/components/segment.css'
-import 'fomantic-ui/dist/components/checkbox.css'
+// import 'fomantic-ui/dist/components/segment.css'
+// import 'fomantic-ui/dist/components/checkbox.css'
 import 'fomantic-ui/dist/components/input.css'
 import 'fomantic-ui/dist/components/header.css'
 import './scss/style.scss'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  Container,
-  Button,
-  Icon,
-  Segment,
-}
-from 'semantic-ui-react'
+import { Container, Button, Icon } from 'semantic-ui-react'
 import Time from './jsx/Time.jsx'
 import Stopwatch from './jsx/Stopwatch.jsx'
 import Timer from './jsx/Timer.jsx'
@@ -34,7 +28,7 @@ const AppStates = {
   Time: 1,
   Stopwatch: 2,
   Timer: 3,
-  Settings: 4
+  //Settings: 4
 }
 
 class App extends React.Component {
@@ -50,23 +44,25 @@ class App extends React.Component {
     var mousemoveTimeout
 
     dom.select('#app').addEventListener('mousemove', function(e) {
-      this.setState(state => ({
+      this.setState({
         uiActive: true
-      }))
+      })
 
       clearTimeout(mousemoveTimeout);
       mousemoveTimeout = setTimeout(() => {
         if (dom.select('button:hover') == undefined && this.state.componentState) {
-          this.setState(state => ({
+          this.setState({
             uiActive: false
-          }))
+          })
         }
       }, 3000)
     }.bind(this))
   }
 
-  setComponentState(componentState) {
-    this.setState(state => state.componentState = componentState)
+  setComponentState(newComponentState) {
+    this.setState({
+      componentState: newComponentState
+    })
   }
 
   render() {
