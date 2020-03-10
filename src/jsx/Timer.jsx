@@ -21,15 +21,17 @@ export default class Timer extends React.Component {
       minutes: 0,
       seconds: 0,
       milliseconds: 0,
-      setHours: 0,
-      setMinutes: 10,
-      setSeconds: 0,
-      alarm: false
+      alarm: false,
+      settings: {
+        hours: 0,
+        minutes: 10,
+        seconds: 0,
+      }
     }
   }
 
   componentDidMount() {
-    const inputMinutes = dom.select('.time-display-input input[id=setMinutes]')
+    const inputMinutes = dom.select('.time-display-input input.minutes')
 
     inputMinutes.focus()
     inputMinutes.selectionStart = 0
@@ -41,10 +43,13 @@ export default class Timer extends React.Component {
     clearInterval(this.interval)
   }
 
-  setTime(segment, value) {
-    this.setState({
-      [segment]: value
-    })
+  updateSettings(key, value) {
+    var newSettings = Object.assign({}, this.state.settings)
+
+    newSettings[key] = value
+    this.setState({ settings: newSettings })
+
+    // console.log(arguments, key, this.state.settings);
   }
 
   start() {
@@ -77,9 +82,9 @@ export default class Timer extends React.Component {
 
   reset() {
     this.setState(state => ({
-      hours: state.setHours,
-      minutes: state.setMinutes,
-      seconds: state.setSeconds,
+      hours: state.settings.hours,
+      minutes: state.settings.minutes,
+      seconds: state.settings.seconds,
       milliseconds: 0,
       alarm: false
     }))
@@ -128,35 +133,24 @@ export default class Timer extends React.Component {
   }
 
   render() {
+    const state = this.state.componentState
+
     if (!this.state.alarm)
       dom.removeClass(app, 'alarm')
 
     return (
       <Container fluid>
         <Container fluid className={
-            (this.state.componentState == TimerStates.Stop
-            ? 'fade-in' : 'hide') + ' time-display-input'
+            state == TimerStates.Stop ? 'fade-in' : 'hide'
           }>
-          {/* // TODO: Refactor into map? */}
           <TimeInput
-            id='setHours'
-            value={this.state.setHours}
-            setTime={this.setTime.bind(this, 'setHours')}
-          />:
-          <TimeInput
-            id='setMinutes'
-            value={this.state.setMinutes}
-            setTime={this.setTime.bind(this, 'setMinutes')}
-          />:
-          <TimeInput
-            id='setSeconds'
-            value={this.state.setSeconds}
-            setTime={this.setTime.bind(this, 'setSeconds')}
+            settings={this.state.settings}
+            update={this.updateSettings.bind(this)}
+            start={this.start.bind(this)}
           />
         </Container>
         <Container className={
-            this.state.componentState == TimerStates.Pause
-            || this.state.componentState == TimerStates.Start
+            state == TimerStates.Pause || state == TimerStates.Start
             ? 'fade-in' : 'hide'
           }>
           <TimeDisplay
@@ -166,34 +160,27 @@ export default class Timer extends React.Component {
           />
         </Container>
         <Container
-          className={this.props.appState.uiActive || this.state.componentState != TimerStates.Start ? 'fade-in-hide' : 'fade-out-hide-center'}>
+          className={
+            this.props.appState.uiActive || state != TimerStates.Start
+            ? 'fade-in-hide' : 'fade-out-hide-center'
+          }>
           <Button icon='play' labelPosition='left' color="green" content='Start' inverted
-            className={
-              this.state.componentState == TimerStates.Start
-              ? 'hide' : 'fade-in'
-            }
+            className={state == TimerStates.Start ? 'hide' : 'fade-in'}
             onClick={() => this.start()}
           />
           <Button icon='pause' labelPosition='left' color="yellow" content='Pause' inverted
             className={
-              this.state.componentState == TimerStates.Pause
-              || this.state.componentState == TimerStates.Stop
+              state == TimerStates.Pause || state == TimerStates.Stop
               ? 'hide' : 'fade-in'
             }
             onClick={() => this.pause()}
           />
           <Button icon='stop' labelPosition='left' color="red" content='Stop' inverted
-            className={
-              this.state.componentState == TimerStates.Stop
-               ? 'hide' : 'fade-in'
-            }
+            className={state == TimerStates.Stop ? 'hide' : 'fade-in'}
             onClick={() => this.stop()}
           />
           <Button inverted
-            className={
-              this.state.componentState == TimerStates.Stop
-              ? 'hide' : 'fade-in'
-            }
+            className={state == TimerStates.Stop ? 'hide' : 'fade-in'}
             onClick={() => this.reset()}>Reset</Button>
         </Container>
       </Container>

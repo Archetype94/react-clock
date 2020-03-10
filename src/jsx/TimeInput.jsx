@@ -1,14 +1,44 @@
 import React from 'react'
 import InputMask from 'react-input-mask'
+import { Container } from 'semantic-ui-react'
 
 import { dom } from '../js/core.js'
 
-export default function TimeInput(props) {
+export default class TimeInput extends React.Component {
+  render() {
+    const
+      keys = Object.keys(this.props.settings),
+      settings = keys.map((key) => {
+        return this.props.settings[key]
+      })
+
+    return (
+      <Container fluid className="time-display-input">
+        {
+          settings.map((setting, index) => {
+            return (
+              <span key={keys[index]}>
+                {index != 0 ? ':' : null}<TimeInputSegment
+                  name={keys[index]}
+                  value={setting}
+                  update={this.props.update.bind(this.props, keys[index])}
+                  start={this.props.start}
+                />
+              </span>
+            )
+          })
+        }
+      </Container>
+    )
+  }
+}
+
+function TimeInputSegment(props) {
   var
     value = props.value
 
   function onChange(event) {
-    props.setTime(event.target.value)
+    props.update(event.target.value)
   }
 
   function beforeMaskedValueChange(newState, oldState, userInput) {
@@ -44,7 +74,7 @@ export default function TimeInput(props) {
     }
   }
 
-  function onKeyDown(event) {
+  function onKeyUp(event) {
     if (event.key == 'ArrowLeft' || event.key == 'ArrowRight') {
       const
         allInputs = dom.selectAll('.time-display-input input'),
@@ -68,7 +98,7 @@ export default function TimeInput(props) {
         nextInput.select()
       }
     } else if (event.key == 'Enter') {
-      this.start()
+      props.start()
     }
   }
 
@@ -78,9 +108,9 @@ export default function TimeInput(props) {
         mask="99"
         maskChar="0"
         alwaysShowMask={true}
-        id={props.id}
+        className={props.name}
         value={value}
-        onKeyUp={onKeyDown}
+        onKeyUp={onKeyUp}
         onChange={onChange}
         beforeMaskedValueChange={beforeMaskedValueChange}
       />
