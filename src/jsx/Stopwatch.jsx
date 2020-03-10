@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button, Container } from 'semantic-ui-react'
+
 import TimeDisplay from './TimeDisplay.jsx'
 
 const StopwatchStates = {

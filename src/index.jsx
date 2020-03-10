@@ -18,10 +18,10 @@ import './scss/style.scss'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Container, Button, Icon } from 'semantic-ui-react'
+
 import Time from './jsx/Time.jsx'
 import Stopwatch from './jsx/Stopwatch.jsx'
 import Timer from './jsx/Timer.jsx'
-import Checkbox from './jsx/Checkbox.jsx'
 
 const AppStates = {
   None: 0,
@@ -79,10 +79,7 @@ class App extends React.Component {
             <Button inverted onClick={() => this.setComponentState(AppStates.Timer)}>
               <Icon name="alarm"/>Timer
             </Button>
-            {/* <Button inverted onClick={() => this.setComponentState(AppStates.Alarm)}>
-              <Icon name="alarm"/>Alarm
-            </Button>
-            <Button inverted onClick={() => this.setComponentState(AppStates.Settings)}>
+            {/*<Button inverted onClick={() => this.setComponentState(AppStates.Settings)}>
               <Icon name="settings"/>Settings
             </Button> */}
           </Button.Group>

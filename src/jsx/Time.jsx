@@ -1,4 +1,5 @@
 import React from 'react'
+
 import TimeDisplay from './TimeDisplay.jsx'
 
 export default class Time extends React.Component {

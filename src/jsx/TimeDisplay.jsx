@@ -1,5 +1,6 @@
 import React from 'react'
 import { Container, Header } from 'semantic-ui-react'
+
 import { base } from '../js/core.js'
 
 export default class TimeDisplay extends React.Component {
@@ -91,6 +92,7 @@ class TimeDisplaySegment extends React.Component {
       })
     } else {
       const changed = (char != prevSegment.char)
+
       segment.push({
         char: char,
         changed: changed,
@@ -100,7 +102,7 @@ class TimeDisplaySegment extends React.Component {
       if (changed) {
         clearTimeout(this.state.tickTimeout)
         this.state.tickTimeout = setTimeout(function() {
-          const updatedSegment = this.state.segment.slice()
+          var updatedSegment = this.state.segment.slice()
 
           updatedSegment[i].changed = false
           this.setState({
