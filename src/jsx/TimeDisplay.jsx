@@ -114,13 +114,20 @@ class TimeDisplaySegment extends React.Component {
   }
 
   render() {
+    var index = 0
+
     if (this.props.segment != this.state.prevInput) {
       this.state.prevInput = this.props.segment
       this.update()
     }
+
     return this.state.segment.map(digit => {
+      const key = index
+
+      index++
+
       return (
-        <span className={
+        <span key={key} className={
             (digit.changed && !this.props.noAnimation ? 'tick ' : '')
             + 'time-display-digit'
           }>

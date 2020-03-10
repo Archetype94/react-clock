@@ -1,7 +1,7 @@
 const devMode = true,
 
   enviroment = devMode ? 'development' : 'production',
-  devTool = devMode ? 'inline-source-map' : '',
+  devTool = devMode ? 'eval-source-map' : '',
 
   path = require('path'),
   HtmlWebpackPlugin = require('html-webpack-plugin'),
