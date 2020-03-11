@@ -90,6 +90,8 @@ export default class Stopwatch extends React.Component {
   }
 
   render() {
+    const state = this.state.componentState
+
     return (
       <Container fluid>
         <TimeDisplay
@@ -99,27 +101,23 @@ export default class Stopwatch extends React.Component {
           milliseconds={Math.floor(this.state.milliseconds / 10)}
         />
         <Container
-          className={this.props.appState.uiActive || this.state.componentState != StopwatchStates.Start ? 'fade-in-hide' : 'fade-out-hide-center'}>
+          className={
+            this.props.appState.uiActive || state != StopwatchStates.Start
+            ? 'fade-in-hide' : 'fade-out-hide-center'
+          }>
           <Button icon='play' labelPosition='left' color="green" content='Start' inverted
-            className={
-              this.state.componentState == StopwatchStates.Start
-              ? 'hide' : 'fade-in'
-            }
+            className={state == StopwatchStates.Start ? 'hide' : 'fade-in'}
             onClick={() => this.start()}
           />
           <Button icon='pause' labelPosition='left' color="yellow" content='Pause' inverted
             className={
-              this.state.componentState == StopwatchStates.Pause
-              || this.state.componentState == StopwatchStates.Stop
+              state == StopwatchStates.Pause || state == StopwatchStates.Stop
               ? 'hide' : 'fade-in'
             }
             onClick={() => this.pause()}
           />
           <Button icon='stop' labelPosition='left' color="red" content='Stop' inverted
-            className={
-              this.state.componentState == StopwatchStates.Stop
-               ? 'hide' : 'fade-in'
-            }
+            className={state == StopwatchStates.Stop ? 'hide' : 'fade-in'}
             onClick={() => this.stop()}
           />
           <Button inverted
