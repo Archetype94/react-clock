@@ -82,6 +82,7 @@ export default class Timer extends React.Component {
 
   reset() {
     this.setState(state => ({
+      secondDate: new Date(),
       hours: state.settings.hours,
       minutes: state.settings.minutes,
       seconds: state.settings.seconds,
@@ -92,11 +93,9 @@ export default class Timer extends React.Component {
   }
 
   updateAlarm() {
-    const app = dom.select('#app')
-
     if (this.state.alarm) {
-      dom.toggleClass(app, 'alarm')
-    } else {
+      dom.toggleClass(dom.select('#app'), 'alarm')
+    } else if (this.state.componentState != TimerStates.Start) {
       clearInterval(this.interval)
     }
   }
