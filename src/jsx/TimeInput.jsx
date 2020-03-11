@@ -34,71 +34,42 @@ export default class TimeInput extends React.Component {
 }
 
 function TimeInputSegment(props) {
-  var
-    value = props.value
-
   function onChange(event) {
     props.update(event.target.value)
   }
 
-  function beforeMaskedValueChange(newState, oldState, userInput) {
-    const { value } = newState
-    const selection = newState.selection
-
-    if (userInput) {
-      const
-        newSelection = selection ? selection.start : null,
-        oldSelection = oldState.selection ? oldState.selection.start : null
-
-      if (newSelection == 2 && oldSelection == 1) {
-        const
-          allInputs = dom.selectAll('.time-display-input input'),
-          nextInputIndex = (() => {
-            for (let i = 0; i < allInputs.length; i++) {
-              if (allInputs[i] == document.activeElement) {
-                return i + 1
-              }
-            }
-          })(),
-          nextInput = nextInputIndex < allInputs.length ? allInputs[nextInputIndex] : null
-
-        if (nextInput) {
-          nextInput.select()
-        }
-      }
-    }
-
-    return {
-      value,
-      selection
-    }
-  }
-
   function onKeyUp(event) {
-    if (event.key == 'ArrowLeft' || event.key == 'ArrowRight') {
+    if (event.key == 'Enter') {
+      props.start()
+    } else {
       const
         allInputs = dom.selectAll('.time-display-input input'),
         target = event.target,
         targetSelectionIndex = target.selectionStart,
-        equalsTarget = (element) => element == target
+        equalsTarget = (element) => element == target,
+        inputActions = {
+          Select: (input) => input.select(),
+          Focus: (input) => input.focus()
+        }
 
       var
         nextInputIndex,
-        nextInput
+        nextInput,
+        inputAction
 
-      if (event.key == 'ArrowLeft' && targetSelectionIndex == 0) {
-        nextInputIndex = Array.from(allInputs).findIndex(equalsTarget) - 1
-      } else if (event.key == 'ArrowRight' && targetSelectionIndex == target.value.length) {
+      if (targetSelectionIndex == target.value.length) {
         nextInputIndex = Array.from(allInputs).findIndex(equalsTarget) + 1
+        inputAction = inputActions.Select
+      } else if (event.key == 'ArrowLeft' && targetSelectionIndex == 0) {
+        nextInputIndex = Array.from(allInputs).findIndex(equalsTarget) - 1
+        inputAction = inputActions.Focus
       }
 
       nextInput = nextInputIndex < allInputs.length ? allInputs[nextInputIndex] : null
 
       if (nextInput) {
-        nextInput.select()
+        inputAction(nextInput)
       }
-    } else if (event.key == 'Enter') {
-      props.start()
     }
   }
 
@@ -109,10 +80,9 @@ function TimeInputSegment(props) {
         maskChar="0"
         alwaysShowMask={true}
         className={props.name}
-        value={value}
+        value={props.value}
         onKeyUp={onKeyUp}
         onChange={onChange}
-        beforeMaskedValueChange={beforeMaskedValueChange}
       />
     </div>
   )
