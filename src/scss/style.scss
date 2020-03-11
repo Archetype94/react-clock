@@ -26,7 +26,17 @@ body {
     background-color: rgb(64,64,64);
 
     .time-display {
-      transform: scale(1.1);
+      transform: scale(1) !important;
+    }
+  }
+
+  .ui-inactive {
+    cursor: none;
+
+    .time-display {
+      &.ui {
+        transform: scale(1.25);
+      }
     }
   }
 }
@@ -65,6 +75,7 @@ body {
 
     &-digit {
       position: relative;
+      z-index: -1;
 
       * {
         display: inline-block;
@@ -98,17 +109,8 @@ body {
   }
 }
 
-.ui-inactive {
-  cursor: none;
-
-  .time-display {
-    &.ui {
-      transform: scale(1.25);
-    }
-  }
-}
-
 .ui {
+  // Semantic UI
   &.inverted {
     label {
       color: $white !important;
