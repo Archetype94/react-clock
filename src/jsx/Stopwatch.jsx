@@ -9,6 +9,7 @@ const StopwatchStates = {
   Stop: 3
 }
 
+// TODO: Add Space/Enter onKeyUp event to Start/Stop 
 export default class Stopwatch extends React.Component {
   constructor(props) {
     super(props)
