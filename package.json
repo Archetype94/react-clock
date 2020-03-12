@@ -43,5 +43,14 @@
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.10.1"
   },
-  "description": ""
+  "description": "Live release: <https://archetype94.github.io/react-clock/dist/>",
+  "main": "webpack.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Archetype94/react-clock.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Archetype94/react-clock/issues"
+  },
+  "homepage": "https://github.com/Archetype94/react-clock#readme"
 }
