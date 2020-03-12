@@ -28,7 +28,7 @@ const AppStates = {
   Time: 1,
   Stopwatch: 2,
   Timer: 3,
-  //Settings: 4
+  // Settings: 4
 }
 
 class App extends React.Component {
