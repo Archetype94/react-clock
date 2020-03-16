@@ -1,8 +1,26 @@
 import { dom, browser } from './js/core.js'
-if (browser.isTerrible() && !browser.supportsObjectFunctions()) {
+(function() {
   var body = dom.select('body')
-  body.innerHTML = '<div id="browser-warning">Your web browser is not good! Please consider updating it or using a better one, otherwise this page (and many others) may not load correctly!</div>' + body.innerHTML
-}
+
+  if (browser.isTerrible() && !browser.supportsObjectFunctions()) {
+    body.innerHTML = '<div class="browser-warning">Your web browser is not good! Please consider updating it or using a better one, otherwise this page (and many others) may not load correctly!</div>' + body.innerHTML
+  }
+
+  window.onerror = function(msg, src, line, col) {
+    var path = ''
+
+    src.split('/').forEach(str => {
+      path +=
+        str != 'http:' ? (
+          path != '' && str != '' ? '/' : ''
+        ) + str : ''
+    })
+
+    if (msg.toString != '') {
+      body.innerHTML += '<div class="browser-error">' + msg + ' (' + path + ':' + line + ':' + col + ')</div>';
+    }
+  }
+})();
 
 // import 'fomantic-ui'
 import 'fomantic-ui/dist/components/reset.css'
@@ -10,8 +28,6 @@ import 'fomantic-ui/dist/components/site.css'
 import 'fomantic-ui/dist/components/container.css'
 import 'fomantic-ui/dist/components/button.css'
 import 'fomantic-ui/dist/components/icon.css'
-// import 'fomantic-ui/dist/components/segment.css'
-// import 'fomantic-ui/dist/components/checkbox.css'
 import 'fomantic-ui/dist/components/input.css'
 import 'fomantic-ui/dist/components/header.css'
 import './scss/style.scss'

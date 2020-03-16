@@ -7,12 +7,23 @@ body {
   color: $white;
 }
 
-#browser-warning {
-  background-color: #FF0000;
-  color: $white;
-  padding: 1rem;
-  font-family: sans-serif;
-  text-align: center;
+.browser {
+  &-error,
+  &-warning {
+    font-family: sans-serif;
+  }
+
+  &-warning {
+    background-color: #FF0000;
+    color: $white;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  &-error {
+    background-color: darken($black, 1.25%);
+    color: darken(red, 15%);
+  }
 }
 
 #app {

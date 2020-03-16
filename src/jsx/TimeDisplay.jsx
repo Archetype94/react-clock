@@ -15,13 +15,20 @@ export default class TimeDisplay extends React.Component {
               this.props.minutes == 0 && this.props.hours == 0 ?
               'fade-out-hide' : 'fade-in'
             }>
-            <TimeDisplaySegment segment={this.props.minutes}/>:
+            <TimeDisplaySegment
+              segment={this.props.minutes}
+              trailingZeros={this.props.hours != 0}
+            />:
           </span>
-          <TimeDisplaySegment segment={this.props.seconds}/>
+          <TimeDisplaySegment
+            segment={this.props.seconds}
+            trailingZeros={this.props.hours != 0 || this.props.minutes != 0 }
+          />
           {this.props.milliseconds || this.props.milliseconds == 0 ?
           <span className='fade-in'>
             .<TimeDisplaySegment
               segment={this.props.milliseconds}
+              trailingZeros
               noAnimation
             />
           </span>
@@ -38,8 +45,7 @@ class TimeDisplaySegment extends React.Component {
     this.state = {
       input: null,
       segment: [],
-      digits: 2,
-      tickTimeout: null
+      digits: 2
     }
 
     if (base.isEmpty(props.digits)) {
@@ -56,6 +62,10 @@ class TimeDisplaySegment extends React.Component {
     this.prevState = Object.assign({}, this.state)
   }
 
+  componentWillUnmount() {
+    clearTimeout(this.timeout)
+  }
+
   initDigit() {
     return {
       char: '0',
@@ -65,11 +75,14 @@ class TimeDisplaySegment extends React.Component {
 
   formatTime(time) {
     time = String(time)
-    const zeros = this.state.digits - time.length
     var output = time
 
-    for (var i = 0; i < zeros; i++) {
-      output = '0' + output
+    if (this.props.trailingZeros) {
+      const zeros = this.state.digits - time.length
+
+      for (var i = 0; i < zeros; i++) {
+        output = '0' + output
+      }
     }
 
     return output
@@ -100,8 +113,8 @@ class TimeDisplaySegment extends React.Component {
       })
 
       if (changed) {
-        clearTimeout(this.state.tickTimeout)
-        this.state.tickTimeout = setTimeout(function() {
+        clearTimeout(this.timeout)
+        this.timeout = setTimeout(function() {
           var updatedSegment = this.state.segment.slice()
 
           updatedSegment[i].changed = false
@@ -116,8 +129,9 @@ class TimeDisplaySegment extends React.Component {
   render() {
     var index = 0
 
-    if (this.props.segment != this.state.prevInput) {
+    if (this.props.segment != this.state.prevInput || this.props.trailingZeros != this.state.prevTrailingZeros) {
       this.state.prevInput = this.props.segment
+      this.state.prevTrailingZeros = this.props.trailingZeros
       this.update()
     }
 
