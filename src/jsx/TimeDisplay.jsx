@@ -15,13 +15,20 @@ export default class TimeDisplay extends React.Component {
               this.props.minutes == 0 && this.props.hours == 0 ?
               'fade-out-hide' : 'fade-in'
             }>
-            <TimeDisplaySegment segment={this.props.minutes}/>:
+            <TimeDisplaySegment
+              segment={this.props.minutes}
+              trailingZeros={this.props.hours != 0}
+            />:
           </span>
-          <TimeDisplaySegment segment={this.props.seconds}/>
+          <TimeDisplaySegment
+            segment={this.props.seconds}
+            trailingZeros={this.props.hours != 0 || this.props.minutes != 0 }
+          />
           {this.props.milliseconds || this.props.milliseconds == 0 ?
           <span className='fade-in'>
             .<TimeDisplaySegment
               segment={this.props.milliseconds}
+              trailingZeros
               noAnimation
             />
           </span>
@@ -65,11 +72,14 @@ class TimeDisplaySegment extends React.Component {
 
   formatTime(time) {
     time = String(time)
-    const zeros = this.state.digits - time.length
     var output = time
 
-    for (var i = 0; i < zeros; i++) {
-      output = '0' + output
+    if (this.props.trailingZeros) {
+      const zeros = this.state.digits - time.length
+
+      for (var i = 0; i < zeros; i++) {
+        output = '0' + output
+      }
     }
 
     return output
