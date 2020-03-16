@@ -129,8 +129,9 @@ class TimeDisplaySegment extends React.Component {
   render() {
     var index = 0
 
-    if (this.props.segment != this.state.prevInput) {
+    if (this.props.segment != this.state.prevInput || this.props.trailingZeros != this.state.prevTrailingZeros) {
       this.state.prevInput = this.props.segment
+      this.state.prevTrailingZeros = this.props.trailingZeros
       this.update()
     }
 
