@@ -31,25 +31,11 @@ export default class Timer extends React.Component {
   }
 
   componentDidMount() {
-    const inputMinutes = dom.select('.time-display-input input.minutes')
-
-    inputMinutes.focus()
-    inputMinutes.selectionStart = 0
-    inputMinutes.selectionEnd = 0
+    this.focusInput()
   }
-
   componentWillUnmount() {
     dom.removeClass(app, 'alarm')
     clearInterval(this.interval)
-  }
-
-  updateSettings(key, value) {
-    var newSettings = Object.assign({}, this.state.settings)
-
-    newSettings[key] = value
-    this.setState({ settings: newSettings })
-
-    // console.log(arguments, key, this.state.settings);
   }
 
   start() {
@@ -78,6 +64,7 @@ export default class Timer extends React.Component {
       componentState: TimerStates.Stop,
       alarm: false
     })
+    this.focusInput()
   }
 
   reset() {
@@ -90,6 +77,23 @@ export default class Timer extends React.Component {
       alarm: false
     }))
     this.updateAlarm()
+  }
+
+  focusInput() {
+    setTimeout(() => {
+      const inputMinutes = dom.select('.time-display-input input.minutes')
+
+      inputMinutes.focus()
+      inputMinutes.selectionStart = 0
+      inputMinutes.selectionEnd = 0
+    })
+  }
+
+  updateSettings(key, value) {
+    var newSettings = Object.assign({}, this.state.settings)
+
+    newSettings[key] = value
+    this.setState({ settings: newSettings })
   }
 
   updateAlarm() {
