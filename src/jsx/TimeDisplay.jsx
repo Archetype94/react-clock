@@ -45,8 +45,7 @@ class TimeDisplaySegment extends React.Component {
     this.state = {
       input: null,
       segment: [],
-      digits: 2,
-      tickTimeout: null
+      digits: 2
     }
 
     if (base.isEmpty(props.digits)) {
@@ -61,6 +60,10 @@ class TimeDisplaySegment extends React.Component {
     }
 
     this.prevState = Object.assign({}, this.state)
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timeout)
   }
 
   initDigit() {
@@ -110,8 +113,8 @@ class TimeDisplaySegment extends React.Component {
       })
 
       if (changed) {
-        clearTimeout(this.state.tickTimeout)
-        this.state.tickTimeout = setTimeout(function() {
+        clearTimeout(this.timeout)
+        this.timeout = setTimeout(function() {
           var updatedSegment = this.state.segment.slice()
 
           updatedSegment[i].changed = false
