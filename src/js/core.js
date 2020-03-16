@@ -1,5 +1,5 @@
 /* Core Convenience Functions
- * @version 1.0
+ * @version 1.0.0
  * @author Aidan S
  * @license CC-BY-NC-SA-4.0
  */
