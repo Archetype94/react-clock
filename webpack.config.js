@@ -1,4 +1,4 @@
-const devMode = true,
+const devMode = false,
 
   enviroment = devMode ? 'development' : 'production',
   devTool = devMode ? 'eval-source-map' : '',
