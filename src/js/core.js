@@ -1,5 +1,5 @@
 /* Core Convenience Functions
- * @version 1.0.0
+ * @version 1.1.0 (Extended dom argument type handling)
  * @author Aidan S
  * @license CC-BY-NC-SA-4.0
  */
@@ -13,16 +13,20 @@ export const dom = {
     return document.querySelectorAll(selector)
   },
 
-  addClass: (element, aClassName) => {
-    let classList = element.className.split(' ')
+  addClass: (selection, aClassName) => {
+    if (selection instanceof Element) {
+      let classList = selection.className.split(' ')
 
-    if (element.className.length == 0) {
-      element.className += aClassName
-    } else if (classList.indexOf(aClassName) == -1) {
-      element.className += ' ' + aClassName
+      if (selection.className.length == 0) {
+        selection.className += aClassName
+      } else if (classList.indexOf(aClassName) == -1) {
+        selection.className += ' ' + aClassName
+      }
+    } else {
+      return dom.addClass(dom.select(selection), aClassName)
     }
 
-    return element
+    return selection
   },
 
   addClassAll: (selector, aClassName) => {
@@ -35,10 +39,14 @@ export const dom = {
     return elements
   },
 
-  removeClass: (element, aClassName) => {
-    element.className = element.className.replace(aClassName, '').trim();
+  removeClass: (selection, aClassName) => {
+    if (selection instanceof Element) {
+      selection.className = selection.className.replace(aClassName, '').trim()
+    } else {
+      return dom.removeClass(dom.select(selection), aClassName)
+    }
 
-    return element
+    return selection
   },
 
   removeClassAll: (selector, aClassName) => {
@@ -51,18 +59,22 @@ export const dom = {
     return elements
   },
 
-  toggleClass: (element, aClassName) => {
-    let classList = element.className.split(' ')
+  toggleClass: (selection, aClassName) => {
+    if (selection instanceof Element) {
+      let classList = selection.className.split(' ')
 
-    if (element.className.length == 0) {
-      element.className += aClassName
-    } else if (classList.indexOf(aClassName) == -1) {
-      element.className += ' ' + aClassName
+      if (selection.className.length == 0) {
+        selection.className += aClassName
+      } else if (classList.indexOf(aClassName) == -1) {
+        selection.className += ' ' + aClassName
+      } else {
+        dom.removeClass(selection, aClassName)
+      }
     } else {
-      dom.removeClass(element, aClassName)
+      return dom.toggleClass(dom.select(selection), aClassName)
     }
 
-    return element
+    return selection
   },
 }
 
