@@ -64,7 +64,7 @@ class App extends React.Component {
         uiActive: true
       })
 
-      clearTimeout(mousemoveTimeout);
+      clearTimeout(mousemoveTimeout)
       mousemoveTimeout = setTimeout(() => {
         if (dom.select('button:hover') == undefined && this.state.componentState) {
           this.setState({

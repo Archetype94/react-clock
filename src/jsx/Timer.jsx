@@ -98,7 +98,7 @@ export default class Timer extends React.Component {
 
   updateAlarm() {
     if (this.state.alarm) {
-      dom.toggleClass(dom.select('#app'), 'alarm')
+      dom.toggleClass('#app', 'alarm')
     } else if (this.state.componentState != TimerStates.Start) {
       clearInterval(this.interval)
     }
