@@ -1,0 +1,57 @@
+.ui {
+  &.inverted {
+    label {
+      color: $white !important;
+    }
+  }
+
+  &.container {
+    padding: 1rem;
+  }
+
+  &.buttons {
+    .button {
+      &:not(:first-child) {
+        margin-left: -1.5px;
+      }
+      @include respond($mobile-view) {
+        width: 100%;
+        display: block !important;
+
+        &:not(:first-child) {
+          margin-top: -1.5px;
+          margin-left: 0;
+        }
+
+        &:first-child {
+          border-bottom-left-radius: 0;
+          border-top-right-radius: 0.28571429rem;
+        }
+
+        &:last-child {
+          border-top-right-radius: 0;
+          border-bottom-left-radius: 0.28571429rem;
+        }
+      }
+    }
+    @include respond($mobile-view) {
+      display: block !important;
+    }
+  }
+
+  .button {
+    &.inverted.icon {
+      .icon {
+        border-right: 0.5px solid;
+        border-color: inherit;
+        border-radius: inherit;
+      }
+
+      &:hover {
+        .icon {
+          border-right: none;
+        }
+      }
+    }
+  }
+}

@@ -1,18 +1,7 @@
 @import 'mixins';
 @import 'variables';
 @import 'animations';
-/*html {
-  font-size: 100%;
-  @include respond(tl) {
-    font-size: 85%;
-  }
-  @include respond(tp) {
-    font-size: 75%;
-  }
-  @include respond(p) {
-    font-size: 65%;
-  }
-}*/
+
 body,
 html {
   margin: 0;
