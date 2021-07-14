@@ -17,10 +17,10 @@ import { dom, browser } from './js/core.js'
     })
 
     if (msg.toString != '') {
-      body.innerHTML += '<div class="browser-error">' + msg + ' (' + path + ':' + line + ':' + col + ')</div>';
+      body.innerHTML += '<div class="browser-error">' + msg + ' (' + path + ':' + line + ':' + col + ')</div>'
     }
   }
-})();
+})()
 
 // import 'fomantic-ui'
 import 'fomantic-ui/dist/components/reset.css'
@@ -64,7 +64,7 @@ class App extends React.Component {
         uiActive: true
       })
 
-      clearTimeout(mousemoveTimeout);
+      clearTimeout(mousemoveTimeout)
       mousemoveTimeout = setTimeout(() => {
         if (dom.select('button:hover') == undefined && this.state.componentState) {
           this.setState({
